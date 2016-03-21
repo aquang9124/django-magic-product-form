@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Product Details</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'products/css/styles.css' %}">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h1>{{ product.name }}</h1>
+				{% if messages %}
+					<ul class="messages">
+					{% for message in messages %}
+						<li class="errors">{{ message }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+			<div class="col-md-6 text-right">
+				<a href="{% url 'index' %}"><button class="btn btn-default go">Go to Product Listing</button></a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<form action="{% url 'update' product.id %}" method="post" class="form-horizontal">
+					{% csrf_token %}
+					<div class="form-group">
+						<label class="control-label col-md-2">Manufacturer/Brand:</label>
+						<div class="col-md-8">
+							<select name="manufacturer" class="form-control">
+							{% for manufacturer in manufacturers %}
+								<option value="{{ manufacturer.id }}">{{ manufacturer.name }}</option>
+							{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">Product Name:</label>
+						<div class="col-md-8">
+							<input type="text" name="name" class="form-control" value="{{ product.name }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">Price ($):</label>
+						<div class="col-md-8">
+							<input type="number" name="price" class="form-control" value="{{ product.price }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2">Description:</label>
+						<div class="col-md-8">
+							<textarea name="description" class="form-control" rows="10">{{ product.description }}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-10 col-md-offset-1">
+							<button class="btn btn-success">Update</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<form action="{% url 'delete' product.id %}" method="post">
+					{% csrf_token %}
+					<button class="btn btn-danger">Delete</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
